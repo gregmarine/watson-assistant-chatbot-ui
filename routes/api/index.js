@@ -1,14 +1,16 @@
 const express = require('express');
-const watson = require('watson-developer-cloud');
+const AssistantV2 = require('ibm-watson/assistant/v2');
+const { IamAuthenticator } = require('ibm-watson/auth');
 const cheerio = require('cheerio');
 const axios = require('axios');
 
 const router = express.Router();
 
-// Instantiate new Watson Assistant Service instance
-var assistant = new watson.AssistantV2({
-    iam_apikey: process.env.ASSISTANT_API_KEY,
-    version: '2018-11-08',
+var assistant = new AssistantV2({
+    version: '2020-04-01',
+    authenticator: new IamAuthenticator({
+      apikey: process.env.ASSISTANT_IAM_APIKEY
+    }),
     url: process.env.ASSISTANT_URL
 });
 
@@ -16,7 +18,7 @@ var assistant = new watson.AssistantV2({
 router.get('/new-session', function(req, res) {
     
     assistant.createSession({
-        assistant_id: process.env.ASSISTANT_ID,
+        assistantId: process.env.ASSISTANT_ID
     }, function(err, response) {
         var sessionData;
         if (err) {
@@ -32,18 +34,18 @@ router.get('/new-session', function(req, res) {
 
 // Send message to Watson Assistant service
 router.post('/message', function(req, res) {
-    var assistant_id = process.env.ASSISTANT_ID || '<assistant_id>';
+    var assistantId = process.env.ASSISTANT_ID || '<assistant_id>';
 
-    if (!assistant_id || assistant_id === '<assistant_id>') {
+    if (!assistantId || assistantId === '<assistant_id>') {
         return res.json({
             'output': {
-                'text': 'The app has not been configured with an <b>assistant_id</b> environment variable.'
+                'text': 'The app has not been configured with an <b>assistantId</b> environment variable.'
             }
         });
     }
 
     var payload = {
-        assistant_id: assistant_id,
+        assistantId: assistantId,
         input: {}
     };
 
@@ -54,7 +56,7 @@ router.post('/message', function(req, res) {
         }
         
         if (req.body.session_id) {
-            payload.session_id = req.body.session_id;
+            payload.sessionId = req.body.session_id;
         }
 
         assistant.message(payload, function(err, data) {

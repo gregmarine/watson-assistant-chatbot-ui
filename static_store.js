@@ -1,4 +1,4 @@
-const DEV_HOST_URL = '';
+const DEV_HOST_URL = 'http://localhost:4000';
 const LOCAL_HOST_URL = 'http://localhost:4000';
 
 module.exports = {

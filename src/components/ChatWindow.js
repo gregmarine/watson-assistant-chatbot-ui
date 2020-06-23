@@ -28,10 +28,10 @@ class ChatBotWindow extends Component {
         if(!session_id) {
             axios.get( DEV_HOST_URL + '/api/new-session', {})
             .then((response) => {
-                this.setState({session_id: response.data.session_id});
+                this.setState({session_id: response.data.result.session_id});
                 this.postMsgWrapper(
-                    'Hi',
-                    response.data.session_id,
+                    '',
+                    response.data.result.session_id,
                     that
                 );
             });  
@@ -46,7 +46,7 @@ class ChatBotWindow extends Component {
             input: {text: userMsg}, session_id: session_id
         }).then(function (response) {
             const newBotMsg = {
-                msgTxt: response.data.output.generic[0].text,
+                msgTxt: response.data.result.output.generic[0].text,
                 msgTimestamp: new Date().toLocaleTimeString(),
                 isBot: true,
                 msgNum: chatMsgs.length + 1
