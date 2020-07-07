@@ -10,6 +10,9 @@ class BotMsg extends Component {
     render() {
         let {msgTxt, timestamp, msgNum, linkList} = this.props;
 
+        console.log(`Text: ${ msgTxt }`);
+        console.log(`Link List: ${ linkList }`);
+
         // CSS classes
         const msgClasses = [
             "chtBot_mxWdth--85per",

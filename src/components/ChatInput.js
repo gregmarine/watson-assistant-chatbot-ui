@@ -70,7 +70,7 @@ class ChatBotUserInput extends Component {
                 <textarea id="user_input"
                     className={txtAreaClasses.join(' ')}
                     ref={this.textInput}
-                    placeholder="Type a message and press the 'Enter' key to send it"
+                    placeholder="How can I help you?"
                     onKeyPress={(e) => {this.checkEnterKey(e)}}
                     onChange={(e) => {this.handleUserInput(e)}}
                     defaultValue={userInput}
